@@ -1,0 +1,4 @@
+rootProject.name = 'angular-spring-websocket-example'
+
+include ':angular'
+include ':server'

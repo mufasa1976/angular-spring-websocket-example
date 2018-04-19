@@ -1,0 +1,46 @@
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'http://repo.spring.io/shapshot' }
+    maven { url 'http://repo.spring.io/milestone' }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "io.spring.platform:platform-bom:${springPlatformVersion}"
+    }
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+
+    compile 'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-websocket',
+            'org.springframework.boot:spring-boot-starter-security',
+            'org.springframework.security:spring-security-messaging'
+
+    compile "software.coolstuff:owncloud-spring-boot-starter:${owncloudSpringBootStarterVersion}"
+
+    compile 'org.springframework.boot:spring-boot-actuator',
+            'org.springframework.boot:spring-boot-devtools'
+}
+
+group = 'io.github.mufasa1976.angular-spring-websocket-example'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava {
+    options.compilerArgs << "-parameters"
+    options.compilerArgs << "-Xlint:overrides" << "-Xlint:unchecked"
+}
+
+idea {
+    module {
+        outputDir file('build/classes/main')
+        testOutputDir file('build/classes/test')
+    }
+}

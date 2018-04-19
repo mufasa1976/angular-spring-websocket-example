@@ -1,0 +1,20 @@
+<owncloud>
+  <users>
+    <user>
+      <username>admin</username>
+      <password>admin</password>
+      <enabled>true</enabled>
+
+      <displayname>Administrator</displayname>
+      <email>admin@example.com</email>
+
+      <groups>
+        <group>admin</group>
+      </groups>
+    </user>
+  </users>
+
+  <groups>
+    <group>admin</group>
+  </groups>
+</owncloud>
