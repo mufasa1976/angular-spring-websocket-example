@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
 
 repositories {
     mavenLocal()
@@ -17,7 +18,9 @@ dependencyManagement {
 dependencies {
     compileOnly 'org.projectlombok:lombok'
 
-    compile 'org.springframework.boot:spring-boot-starter-web',
+    compile project(path: ':angular', configuration: 'webjar')
+
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf',
             'org.springframework.boot:spring-boot-starter-websocket',
             'org.springframework.boot:spring-boot-starter-security',
             'org.springframework.security:spring-security-messaging'
@@ -43,4 +46,9 @@ idea {
         outputDir file('build/classes/main')
         testOutputDir file('build/classes/test')
     }
+}
+
+clean.doFirst {
+    delete '.gradle', "$project.buildDir", 'node_modules'
+    followSymlinks = false
 }

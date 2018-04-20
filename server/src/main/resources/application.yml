@@ -1,2 +1,6 @@
 owncloud:
   location: classpath:/owncloud.xml
+
+spring:
+  thymeleaf:
+    prefix: classpath:/META-INF/resources/webjars/angular/

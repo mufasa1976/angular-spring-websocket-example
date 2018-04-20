@@ -9,12 +9,25 @@
       <email>admin@example.com</email>
 
       <groups>
-        <group>admin</group>
+        <group>ROLE_ADMIN</group>
+      </groups>
+    </user>
+    <user>
+      <username>john</username>
+      <password>doe</password>
+      <enabled>true</enabled>
+
+      <displayname>John Doe</displayname>
+      <email>john.doe@example.com</email>
+
+      <groups>
+        <group>ROLE_USER</group>
       </groups>
     </user>
   </users>
 
   <groups>
-    <group>admin</group>
+    <group>ROLE_ADMIN</group>
+    <group>ROLE_USER</group>
   </groups>
 </owncloud>

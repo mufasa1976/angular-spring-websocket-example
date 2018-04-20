@@ -1,0 +1,58 @@
+apply plugin: 'com.moowork.node'
+
+configurations {
+  webjar
+}
+
+node {
+  version = '9.11.1'
+  npmVersion = '5.8.0'
+  download = true
+  nodeModulesDir = file("${project.projectDir}")
+}
+
+npm_install {
+  args = ['--loglevel', 'warn']
+}
+
+def generatedWebClientDir = "$project.buildDir/webjar/src/main/generated/$project.name"
+def generatedWebClientResourcesDir = "$generatedWebClientDir/resources"
+def filesToCopy = copySpec {
+  from fileTree("${project.buildDir}/frontend")
+  into "META-INF/resources/webjars/${project.name}"
+}
+
+task ngBuild(type: NpmTask) {
+  group = 'Build'
+  description = 'Execute "npm run prodBuild" command'
+  dependsOn npm_install
+  args = ['run', 'build']
+}
+
+task generateWebjarResources(type: Copy) {
+  dependsOn ngBuild
+  with filesToCopy
+  into generatedWebClientResourcesDir
+}
+
+task webjarJar(type: Jar) {
+  group = 'Build'
+  description = 'Build a jar having the JavaScript App in META/resources/<project name>'
+
+  destinationDir = file("${project.buildDir}/libs")
+  baseName = project.name
+  version = project.version
+  classifier = "webjar"
+
+  from generateWebjarResources
+}
+
+artifacts {
+  webjar webjarJar
+}
+
+idea {
+  module {
+    generatedSourceDirs += file(generatedWebClientResourcesDir)
+  }
+}
