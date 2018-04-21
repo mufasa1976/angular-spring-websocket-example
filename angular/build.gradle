@@ -37,7 +37,7 @@ task generateWebjarResources(type: Copy) {
 
 task webjarJar(type: Jar) {
   group = 'Build'
-  description = 'Build a jar having the JavaScript App in META/resources/<project name>'
+  description = 'Build a jar having the JavaScript App in META-INF/resources/webjars/<project name>'
 
   destinationDir = file("${project.buildDir}/libs")
   baseName = project.name
@@ -55,4 +55,9 @@ idea {
   module {
     generatedSourceDirs += file(generatedWebClientResourcesDir)
   }
+}
+
+task clean(type: Delete) {
+  delete '.gradle', "$project.buildDir", 'node_modules'
+  followSymlinks = false
 }
