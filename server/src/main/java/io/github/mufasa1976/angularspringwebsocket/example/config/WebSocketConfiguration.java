@@ -12,7 +12,7 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/websocket")
+        registry.addEndpoint("/api/websocket-connect")
                 .addInterceptors(new HttpSessionHandshakeInterceptor())
                 .withSockJS();
     }

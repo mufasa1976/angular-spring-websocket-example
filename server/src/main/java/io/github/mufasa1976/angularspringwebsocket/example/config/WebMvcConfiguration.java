@@ -32,9 +32,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.setOrder(1);
-    registry.addResourceHandler("/*.js", "/*.css")
+    registry.addResourceHandler("/*.bundle.js", "/*.bundle.css", "/*.chunk.js")
             .addResourceLocations(prefix);
-    registry.addResourceHandler("/*.js.map", "/*.css.map")
+    registry.addResourceHandler("/*.bundle.js.map", "/*.bundle.css.map", "/*.chunk.js.map")
             .addResourceLocations(prefix);
     registry.addResourceHandler("/*.eot", "/*.svg", "/*.woff2", "/*.woff", "/*.ttf", "/*.ico")
             .addResourceLocations(prefix);
