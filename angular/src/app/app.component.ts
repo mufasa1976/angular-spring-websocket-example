@@ -9,12 +9,23 @@ import {AuthenticationState} from './authentication/store/reducers';
   template: `
     <app-login *ngIf="(authentication$ | async).state != 'LOGGED_IN'; else loggedIn"></app-login>
     <ng-template #loggedIn>
-      I am logged in
+      <mat-toolbar color="primary">
+        <mat-toolbar-row>
+          <span>{{(authentication$ | async)?.user?.displayname}}</span>
+          <span class="spacer"></span>
+        </mat-toolbar-row>
+      </mat-toolbar>
+      <router-outlet></router-outlet>
     </ng-template>
-  `
+  `,
+  styles: [
+      `.spacer {
+      flex: 1 1 auto
+    }`
+  ]
 })
 export class AppComponent {
-  private authentication$: Observable<AuthenticationState>;
+  authentication$: Observable<AuthenticationState>;
 
   constructor(store: Store<State>) {
     this.authentication$ = store.select('authentication');

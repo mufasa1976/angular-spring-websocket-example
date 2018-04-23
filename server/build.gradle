@@ -5,8 +5,8 @@ apply plugin: 'org.springframework.boot'
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url 'http://repo.spring.io/shapshot' }
-    maven { url 'http://repo.spring.io/milestone' }
+    maven { url = 'http://repo.spring.io/shapshot' }
+    maven { url = 'http://repo.spring.io/milestone' }
 }
 
 dependencyManagement {
@@ -43,8 +43,8 @@ compileJava {
 
 idea {
     module {
-        outputDir file('build/classes/main')
-        testOutputDir file('build/classes/test')
+        outputDir = file('build/classes/main')
+        testOutputDir = file('build/classes/test')
     }
 }
 

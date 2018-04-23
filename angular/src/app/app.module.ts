@@ -18,6 +18,9 @@ import {AutoFocusDirective} from './auto-focus.directive';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {XRequestedWithInterceptor} from './interceptors/x-requested-with-interceptor.service';
 import {BaseUrlInterceptor} from './interceptors/base-url-interceptor.service';
+import {MatToolbarModule} from "@angular/material";
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { ForbiddenComponent } from './components/forbidden.component';
 
 const HTTP_INTERCEPTOR_PROVIDERS: Provider[] = [
   {provide: HTTP_INTERCEPTORS, useClass: XRequestedWithInterceptor, multi: true},
@@ -28,12 +31,15 @@ const HTTP_INTERCEPTOR_PROVIDERS: Provider[] = [
   declarations: [
     AppComponent,
     AutoFocusDirective,
+    PageNotFoundComponent,
+    ForbiddenComponent,
   ],
   imports: [
     AuthenticationModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    MatToolbarModule,
     StoreModule.forRoot(reducers, {metaReducers}),
     StoreDevtoolsModule.instrument({
       name: 'angular-spring-websocket Store',
@@ -50,4 +56,5 @@ const HTTP_INTERCEPTOR_PROVIDERS: Provider[] = [
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}

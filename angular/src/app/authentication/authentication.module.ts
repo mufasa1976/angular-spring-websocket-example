@@ -4,6 +4,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {LoginComponent} from './components/login.component';
 import {MatButtonModule, MatCardModule, MatInputModule, MatSnackBarModule} from '@angular/material';
 import {FormsModule} from '@angular/forms';
+import {AuthenticationGuard} from "./guards/authentication-guard.service";
 
 const declarations = [
   LoginComponent
@@ -20,6 +21,8 @@ const declarations = [
     MatSnackBarModule
   ],
   declarations: declarations,
-  exports: declarations
+  exports: declarations,
+  providers: [AuthenticationGuard]
 })
-export class AuthenticationModule {}
+export class AuthenticationModule {
+}
