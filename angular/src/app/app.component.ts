@@ -17,7 +17,7 @@ import {LogoutAction} from './authentication/store/actions';
           <button mat-icon-button (click)="logout()"><mat-icon>power_settings_new</mat-icon></button>
         </mat-toolbar-row>
       </mat-toolbar>
-      <router-outlet></router-outlet>
+      <app-chat></app-chat>
     </ng-template>
   `,
   styles: [

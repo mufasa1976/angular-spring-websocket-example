@@ -1,10 +1,22 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ChatComponent} from './chat.component';
+import {ChatViewComponent} from './chat-view.component';
+import {FormsModule} from '@angular/forms';
+import {StompRService} from '@stomp/ng2-stompjs';
+
+const declarations = [
+  ChatComponent,
+  ChatViewComponent
+]
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
-  declarations: []
+  declarations: declarations,
+  exports: declarations,
+  providers: [StompRService]
 })
-export class ChatModule { }
+export class ChatModule {}

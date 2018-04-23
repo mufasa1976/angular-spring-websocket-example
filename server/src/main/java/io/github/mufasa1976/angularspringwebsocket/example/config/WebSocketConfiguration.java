@@ -13,8 +13,7 @@ public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrok
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/api/websocket-connect")
-                .addInterceptors(new HttpSessionHandshakeInterceptor())
-                .withSockJS();
+                .addInterceptors(new HttpSessionHandshakeInterceptor());
     }
 
     @Override

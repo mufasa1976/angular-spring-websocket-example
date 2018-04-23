@@ -21,6 +21,7 @@ import {BaseUrlInterceptor} from './interceptors/base-url-interceptor.service';
 import {MatButtonModule, MatCardModule, MatIconModule, MatToolbarModule} from '@angular/material';
 import { PageNotFoundComponent } from './components/page-not-found.component';
 import { ForbiddenComponent } from './components/forbidden.component';
+import {ChatModule} from './chat/chat.module';
 
 const HTTP_INTERCEPTOR_PROVIDERS: Provider[] = [
   {provide: HTTP_INTERCEPTORS, useClass: XRequestedWithInterceptor, multi: true},
@@ -36,6 +37,7 @@ const HTTP_INTERCEPTOR_PROVIDERS: Provider[] = [
   ],
   imports: [
     AuthenticationModule,
+    ChatModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
