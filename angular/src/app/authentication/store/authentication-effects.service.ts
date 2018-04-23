@@ -2,7 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {Action} from '@ngrx/store';
-import {AuthenticationActionTypes, LoginAction, LoginFailedAction, LoginSuccessAction} from './actions';
+import {
+  AuthenticationActionTypes,
+  LoggedOutAction,
+  LoginAction,
+  LoginFailedAction,
+  LoginSuccessAction,
+  LogoutAction
+} from './actions';
 import {catchError, map, mergeMap} from 'rxjs/operators';
 import {User} from '../../shared';
 import {Observable} from 'rxjs/Observable';
@@ -34,4 +41,21 @@ export class AuthenticationEffects {
         })
       )
     ));
+
+  @Effect()
+  logout$: Observable<Action> = this.actions$.pipe(
+    ofType<LogoutAction>(AuthenticationActionTypes.LOGOUT),
+    mergeMap(action =>
+    this.http.get('/api/logout', {
+      observe: 'response'
+    }).pipe(
+      map(response => new LoggedOutAction()),
+      catchError(error => {
+        this.snackbar.open('Logout failed', null, {
+          duration: 3000
+        });
+        return of(new LoggedOutAction());
+      })
+    ))
+  );
 }

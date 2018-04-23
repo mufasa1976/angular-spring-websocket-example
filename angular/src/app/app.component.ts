@@ -3,6 +3,7 @@ import {Store} from '@ngrx/store';
 import {State} from './store';
 import {Observable} from 'rxjs/Observable';
 import {AuthenticationState} from './authentication/store/reducers';
+import {LogoutAction} from './authentication/store/actions';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ import {AuthenticationState} from './authentication/store/reducers';
         <mat-toolbar-row>
           <span>{{(authentication$ | async)?.user?.displayname}}</span>
           <span class="spacer"></span>
+          <button mat-icon-button (click)="logout()"><mat-icon>power_settings_new</mat-icon></button>
         </mat-toolbar-row>
       </mat-toolbar>
       <router-outlet></router-outlet>
@@ -27,7 +29,11 @@ import {AuthenticationState} from './authentication/store/reducers';
 export class AppComponent {
   authentication$: Observable<AuthenticationState>;
 
-  constructor(store: Store<State>) {
+  constructor(private store: Store<State>) {
     this.authentication$ = store.select('authentication');
+  }
+
+  logout(): void {
+    this.store.dispatch(new LogoutAction());
   }
 }
