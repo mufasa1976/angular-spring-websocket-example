@@ -10,14 +10,15 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrokerConfigurer {
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/api/websocket-connect")
-                .addInterceptors(new HttpSessionHandshakeInterceptor());
-    }
+  @Override
+  public void registerStompEndpoints(StompEndpointRegistry registry) {
+    registry.addEndpoint("/api/websocket-connect")
+            .addInterceptors(new HttpSessionHandshakeInterceptor());
+  }
 
-    @Override
-    protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
-        messages.anyMessage().denyAll();
-    }
+  @Override
+  protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
+    messages.nullDestMatcher().authenticated()
+            .anyMessage().denyAll();
+  }
 }

@@ -4,11 +4,12 @@ import {ChatComponent} from './chat.component';
 import {ChatViewComponent} from './chat-view.component';
 import {FormsModule} from '@angular/forms';
 import {StompRService} from '@stomp/ng2-stompjs';
+import {CookieService} from "ngx-cookie-service";
 
 const declarations = [
   ChatComponent,
   ChatViewComponent
-]
+];
 
 @NgModule({
   imports: [
@@ -17,6 +18,9 @@ const declarations = [
   ],
   declarations: declarations,
   exports: declarations,
-  providers: [StompRService]
+  providers: [
+    StompRService,
+    CookieService
+  ]
 })
 export class ChatModule {}
