@@ -7,6 +7,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDateTime;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -19,9 +21,9 @@ public class ChatController {
     messageTemplate.convertAndSend("/websocket/topic/chat", message);
   }
 
-  @Scheduled(cron = "*/5 * * * * ?")
+  @Scheduled(cron = "* * * * * ?")
   public void sendPeriodicMessage() {
     log.info("Sending periodic System Message");
-    messageTemplate.convertAndSend("/websocket/topic/chat", "periodic message");
+    messageTemplate.convertAndSend("/websocket/topic/chat", "periodic message at " + LocalDateTime.now());
   }
 }

@@ -1,0 +1,12 @@
+.scrollable {
+  position: absolute;
+  height: 80%;
+  left: 8px;
+  right: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.message {
+  display: block;
+}

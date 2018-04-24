@@ -1,15 +1,14 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {StompRService} from "@stomp/ng2-stompjs";
-import {Store} from "@ngrx/store";
-import {State} from "../store";
-import {Subscription} from "rxjs/Subscription";
-import {LoginState} from "../authentication/shared";
-import {CookieService} from "ngx-cookie-service";
-import {Location, PlatformLocation} from "@angular/common";
-import {StompHeaders} from "@stomp/ng2-stompjs/src/stomp-headers";
-import {Observable} from "rxjs/Observable";
+import {StompRService} from '@stomp/ng2-stompjs';
+import {Store} from '@ngrx/store';
+import {State} from '../store';
+import {Subscription} from 'rxjs/Subscription';
+import {LoginState} from '../authentication/shared';
+import {CookieService} from 'ngx-cookie-service';
+import {Location, PlatformLocation} from '@angular/common';
+import {StompHeaders} from '@stomp/ng2-stompjs/src/stomp-headers';
+import {Observable} from 'rxjs/Observable';
 import {Message} from '@stomp/stompjs';
-import {EmptyObservable} from "rxjs/observable/EmptyObservable";
 
 @Injectable()
 export class StompService implements OnDestroy {
@@ -35,7 +34,7 @@ export class StompService implements OnDestroy {
       websocketUrl = websocketUrl.replace('http://', 'ws://');
       websocketUrl = websocketUrl.replace('https://', 'wss://');
       let headers: StompHeaders = {};
-      if (cookieService.check("XSRF-TOKEN")) {
+      if (cookieService.check('XSRF-TOKEN')) {
         headers = {
           ...headers,
           'X-XSRF-TOKEN': cookieService.get('XSRF-TOKEN')
@@ -63,11 +62,9 @@ export class StompService implements OnDestroy {
     }
   }
 
-  subscribe(queueName: string, headers?: StompHeaders): Observable<Message> {
-    if (!this.stompService.connected()) {
-      return new EmptyObservable<Message>();
-    }
-    this.stompService.subscribe(queueName, headers);
+  subscribeToChat(): Observable<string> {
+    return this.stompService.subscribe('/websocket/topic/chat')
+      .map((message: Message) => message.body);
   }
 
   disconnect(): void {
