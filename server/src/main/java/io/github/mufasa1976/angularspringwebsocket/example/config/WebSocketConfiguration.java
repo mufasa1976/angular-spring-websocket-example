@@ -8,25 +8,28 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
+import static io.github.mufasa1976.angularspringwebsocket.example.ApplicationRole.USER;
+
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrokerConfigurer {
-  @Override
-  public void registerStompEndpoints(StompEndpointRegistry registry) {
-    registry.addEndpoint("/api/websocket-connect")
-            .addInterceptors(new HttpSessionHandshakeInterceptor());
-  }
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/websocket/connect")
+                .addInterceptors(new HttpSessionHandshakeInterceptor());
+    }
 
-  @Override
-  public void configureMessageBroker(MessageBrokerRegistry registry) {
-    registry.setApplicationDestinationPrefixes("/websocket/app")
-            .setUserDestinationPrefix("/websocket/user");
-  }
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.setApplicationDestinationPrefixes("/websocket/app")
+                .setUserDestinationPrefix("/websocket/user");
+    }
 
-  @Override
-  protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
-    messages.nullDestMatcher().authenticated()
-            .simpSubscribeDestMatchers("/websocket/topic/chat").authenticated()
-            .anyMessage().denyAll();
-  }
+    @Override
+    protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
+        messages.nullDestMatcher().authenticated()
+                .simpDestMatchers("/websocket/app/broadcast").hasAuthority(USER)
+                .simpSubscribeDestMatchers("/websocket/topic/chat").authenticated()
+                .anyMessage().denyAll();
+    }
 }

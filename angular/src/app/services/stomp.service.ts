@@ -30,9 +30,10 @@ export class StompService implements OnDestroy {
                                   cookieService: CookieService): void {
     if (loginState === LoginState.LOGGED_IN && !stompService.connected()) {
       let websocketUrl =
-        Location.joinWithSlash((platformLocation as any).location.href, 'api/websocket-connect');
+        Location.joinWithSlash((platformLocation as any).location.href, 'websocket/connect');
       websocketUrl = websocketUrl.replace('http://', 'ws://');
       websocketUrl = websocketUrl.replace('https://', 'wss://');
+      console.info(websocketUrl);
       let headers: StompHeaders = {};
       if (cookieService.check('XSRF-TOKEN')) {
         headers = {
@@ -65,6 +66,10 @@ export class StompService implements OnDestroy {
   subscribeToChat(): Observable<string> {
     return this.stompService.subscribe('/websocket/topic/chat')
       .map((message: Message) => message.body);
+  }
+
+  writeMessage(message: string): void {
+    this.stompService.publish('/websocket/app/broadcast', message);
   }
 
   disconnect(): void {

@@ -39,6 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
             .csrf()
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            .ignoringAntMatchers("/api/websocket-connect");
+            .ignoringAntMatchers("/websocket/connect");
     }
 }
