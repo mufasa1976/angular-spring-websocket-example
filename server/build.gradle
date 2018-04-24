@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'docker'
 
 repositories {
     mavenLocal()
@@ -31,14 +32,17 @@ dependencies {
             'org.springframework.boot:spring-boot-devtools'
 }
 
-group = 'io.github.mufasa1976.angular-spring-websocket-example'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 compileJava {
     options.compilerArgs << "-parameters"
     options.compilerArgs << "-Xlint:overrides" << "-Xlint:unchecked"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+jar {
+    group = 'io.github.mufasa1976'
+    baseName = 'angular-spring-websocket-example'
 }
 
 idea {
@@ -52,3 +56,18 @@ clean.doFirst {
     delete '.gradle', "$project.buildDir", 'node_modules'
     followSymlinks = false
 }
+
+docker {
+    baseImage = 'openjdk:8-jre'
+    maintainer = 'mufasa1976@github.io'
+}
+
+task dockerize(type: Docker) {
+    addFile {
+        from bootJar
+        rename { 'app.jar' }
+    }
+    entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/app.jar'])
+}
+
+dockerize.dependsOn build
