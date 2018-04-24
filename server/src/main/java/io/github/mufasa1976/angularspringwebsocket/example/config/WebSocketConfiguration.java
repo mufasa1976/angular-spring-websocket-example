@@ -1,6 +1,7 @@
 package io.github.mufasa1976.angularspringwebsocket.example.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
 import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -17,8 +18,15 @@ public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrok
   }
 
   @Override
+  public void configureMessageBroker(MessageBrokerRegistry registry) {
+    registry.setApplicationDestinationPrefixes("/websocket/app")
+            .setUserDestinationPrefix("/websocket/user");
+  }
+
+  @Override
   protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
     messages.nullDestMatcher().authenticated()
+            .simpSubscribeDestMatchers("/websocket/topic/chat").authenticated()
             .anyMessage().denyAll();
   }
 }

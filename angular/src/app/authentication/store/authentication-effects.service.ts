@@ -15,12 +15,14 @@ import {User} from '../../shared';
 import {Observable} from 'rxjs/Observable';
 import {of} from 'rxjs/observable/of';
 import {MatSnackBar} from '@angular/material';
+import {StompService} from "../../services/stomp.service";
 
 @Injectable()
 export class AuthenticationEffects {
 
   constructor(private http: HttpClient,
               private actions$: Actions,
+              private stompService: StompService,
               private snackbar: MatSnackBar) { }
 
   @Effect()
@@ -45,17 +47,19 @@ export class AuthenticationEffects {
   @Effect()
   logout$: Observable<Action> = this.actions$.pipe(
     ofType<LogoutAction>(AuthenticationActionTypes.LOGOUT),
-    mergeMap(action =>
-    this.http.get('/api/logout', {
-      observe: 'response'
-    }).pipe(
-      map(response => new LoggedOutAction()),
-      catchError(error => {
-        this.snackbar.open('Logout failed', null, {
-          duration: 3000
-        });
-        return of(new LoggedOutAction());
-      })
-    ))
+    mergeMap(action => {
+      this.stompService.disconnect();
+      return this.http.head('/api/logout', {
+        observe: 'response'
+      }).pipe(
+        map(response => new LoggedOutAction()),
+        catchError(error => {
+          this.snackbar.open('Logout failed', null, {
+            duration: 3000
+          });
+          return of(new LoggedOutAction());
+        })
+      )
+    })
   );
 }

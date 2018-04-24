@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Location, PlatformLocation} from '@angular/common';
-import {StompRService} from '@stomp/ng2-stompjs';
-import {CookieService} from "ngx-cookie-service";
-import {StompHeaders} from "@stomp/ng2-stompjs/src/stomp-headers";
+import {Message} from '@stomp/stompjs';
+import {Subscription} from "rxjs/Subscription";
+import "rxjs/add/operator/map";
+import {StompService} from "../services/stomp.service";
 
 @Component({
   selector: 'app-chat',
@@ -11,40 +11,23 @@ import {StompHeaders} from "@stomp/ng2-stompjs/src/stomp-headers";
 })
 export class ChatComponent implements OnInit, OnDestroy {
 
-  constructor(private platformLocation: PlatformLocation,
-              private stompClient: StompRService,
-              private cookieService: CookieService) { }
+  private subscription: Subscription;
+
+  constructor(private stompService: StompService) { }
 
   ngOnInit() {
-    let websocketUrl =
-      Location.joinWithSlash((this.platformLocation as any).location.href, 'api/websocket-connect');
-    websocketUrl = websocketUrl.replace('http://', 'ws://');
-    websocketUrl = websocketUrl.replace('https://', 'wss://');
-    this.stompClient.config = {
-      url: websocketUrl,
-      headers: this.getStompHeaders(),
-      debug: true,
-      heartbeat_in: 0,
-      heartbeat_out: 20 * 1000,
-      reconnect_delay: 5 * 1000
-    };
-    this.stompClient.initAndConnect();
+    let that = this;
+    setTimeout(function () {
+      that.subscription = that.stompService.subscribe("/websocket/topic/chat")
+        .map((message: Message) => message.body)
+        .subscribe(chatMessage => console.info(chatMessage));
+    }, 100);
   }
 
-  private getStompHeaders(): StompHeaders {
-    let headers: StompHeaders = {};
-    if (this.cookieService.check("XSRF-TOKEN")) {
-      headers = {
-        ...headers,
-        'X-XSRF-TOKEN': this.cookieService.get('XSRF-TOKEN')
-      };
-    }
-    return headers;
-  }
 
   ngOnDestroy(): void {
-    if (this.stompClient.connected()) {
-      this.stompClient.disconnect();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 

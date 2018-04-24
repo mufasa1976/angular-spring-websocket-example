@@ -37,13 +37,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
             .sessionManagement()
             .and()
-            .formLogin().disable()
-            .logout().logoutUrl("/api/logout").permitAll()
-            .logoutSuccessHandler((request, response, authentication) ->
-                    log.info("User {} logged out successfully", authentication.getName()))
-            .clearAuthentication(true)
-            .invalidateHttpSession(true)
-            .and()
             .csrf()
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             .ignoringAntMatchers("/api/websocket-connect");
