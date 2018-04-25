@@ -16,21 +16,24 @@ export class StompService implements OnDestroy {
   private readonly subscription: Subscription;
 
   constructor(private stompService: StompRService,
+              location: Location,
               platformLocation: PlatformLocation,
               store: Store<State>,
               cookieService: CookieService) {
     this.subscription = store.select('authentication')
       .subscribe(authentication =>
-        this.changeStompServiceState(authentication.state, platformLocation, stompService, cookieService));
+        this.changeStompServiceState(authentication.state, location, platformLocation, stompService, cookieService));
   }
 
   private changeStompServiceState(loginState: LoginState,
+                                  location: Location,
                                   platformLocation: PlatformLocation,
                                   stompService: StompRService,
                                   cookieService: CookieService): void {
     if (loginState === LoginState.LOGGED_IN && !stompService.connected()) {
-      let websocketUrl =
-        Location.joinWithSlash((platformLocation as any).location.href, 'websocket/connect');
+      let websocketUrl = Location.joinWithSlash(
+        (platformLocation as any).location.origin,
+        location.prepareExternalUrl('websocket/connect'));
       websocketUrl = websocketUrl.replace('http://', 'ws://');
       websocketUrl = websocketUrl.replace('https://', 'wss://');
       console.info(websocketUrl);
