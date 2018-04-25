@@ -17,28 +17,27 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Order
 @Slf4j
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+  @Bean
+  @Override
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-            .antMatchers("/api/**").authenticated()
-            .anyRequest().permitAll()
-            .and()
-            .securityContext()
-            .and()
-            .httpBasic().realmName("angular-spring-websocket-example")
-            .and()
-            .exceptionHandling()
-            .and()
-            .sessionManagement()
-            .and()
-            .csrf()
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            .ignoringAntMatchers("/websocket/connect");
-    }
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests()
+        .antMatchers("/api/**").authenticated()
+        .anyRequest().permitAll()
+        .and()
+        .securityContext()
+        .and()
+        .httpBasic().realmName("angular-spring-websocket-example")
+        .and()
+        .exceptionHandling()
+        .and()
+        .sessionManagement()
+        .and()
+        .csrf()
+        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+  }
 }
