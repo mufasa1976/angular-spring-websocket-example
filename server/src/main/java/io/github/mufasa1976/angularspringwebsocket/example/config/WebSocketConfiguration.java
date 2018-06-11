@@ -16,6 +16,7 @@ public class WebSocketConfiguration extends AbstractSecurityWebSocketMessageBrok
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/websocket/connect")
+                .setAllowedOrigins("*")
                 .addInterceptors(new HttpSessionHandshakeInterceptor());
     }
 
