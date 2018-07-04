@@ -66,14 +66,14 @@ apache:
   SSLCertificateKeyFile "/etc/apache2/ssl/server.key"
 
   ProxyPreserveHost On
+  RewriteEngine On
 
-  <Location "/">
-    ProxyPass http://nginx:80/
-  </Location>
+  RequestHeader set Connection "Upgrade" env=WEBSOCKET
+  RequestHeader set Upgrade "WebSocket" env=WEBSOCKET
 
-  <Location ~ ".*/websocket.*">
-    ProxyPass ws://nginx:80/
-  </Location>
+  RewriteCond %{REQUEST_URI} ^.*/websocket.* [NC]
+  RewriteRule .* ws://nginx:80%{REQUEST_URI} [E=WEBSOCKET,NE,P]
+  RewriteRule .* http://nginx:80%{REQUEST_URI} [NE,P]
 </VirtualHost>
 ```
 
