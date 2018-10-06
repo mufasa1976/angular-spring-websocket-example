@@ -31,6 +31,11 @@ The following Modules should be enabled on Apache httpd:
 nginx should be compiled with the http-proxy Module.
 ```
 http {
+  map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+  }
+
   server {
     listen 443;
     server_name www.example.com;
@@ -38,18 +43,22 @@ http {
     ssl on;
     ssl_certificate /etc/nginx/ssl/server.crt;
     ssl_certificate_key /etc/nginx/ssl/server.key;
-    
+
     location /someContextPath/websocket/ {
       proxy_pass http://app:8080/websocket/;
       proxy_http_version 1.1;
+      proxy_set_header Host $host;
       proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "Upgrade";
+      proxy_set_header Connection $connection_upgrade;
       proxy_set_header X-Forwarded-Prefix "/someContextPath";
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
-    
+
     location /someContextPath/ {
       proxy_pass http://app:8080/;
+      proxy_set_header Host $host;
       proxy_set_header X-Forwarded-Prefix "/someContextPath";
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
   }
 }
@@ -80,21 +89,30 @@ apache:
 nginx:
 ```
 http {
+  map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+  }
+
   server {
     listen 80;
     server_name www.example.com;
-    
+
     location /someContextPath/websocket/ {
       proxy_pass http://app:8080/websocket/;
       proxy_http_version 1.1;
+      proxy_set_header Host $host;
       proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "Upgrade";
+      proxy_set_header Connection $connection_upgrade;
       proxy_set_header X-Forwarded-Prefix "/someContextPath";
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
-    
+
     location /someContextPath/ {
       proxy_pass http://app:8080/;
+      proxy_set_header Host $host;
       proxy_set_header X-Forwarded-Prefix "/someContextPath";
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
   }
 }
